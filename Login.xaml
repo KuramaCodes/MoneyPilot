@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="GhostWhite">
     <Grid>
-        <Image Height="256" Width="512" Source="/Images/MoneyPilot_Icon.png" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1" Margin="0,-6,0,0"/>
+        <Image Height="256" Width="512" Source="/Images/MoneyPilot_Icon.png" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="-1" Margin="0,-6,0,0"/>
         <Label Content="©Dustin Gatzen" Height="30" Width="125" Margin="479,141,196,279" FontSize="15"/>
         <Grid HorizontalAlignment="Center" Height="132" Margin="0,225,0,0" VerticalAlignment="Top" Width="376">
             <Label Content="Username:" Height="27" Width="100" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,266,0"/>
@@ -17,5 +17,7 @@
             <Button Content="Login" Height="26" Width="100" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,96,0,0" Click="Button_Click" IsDefault="True" FontSize="16" FontWeight="Bold"/>
         </Grid>
         <CheckBox Content="New User" HorizontalAlignment="Left" Margin="479,255,0,0" VerticalAlignment="Top" x:Name="Registration" IsChecked="False" Click="Registration_Click" Visibility="Hidden"/>
+        <Rectangle HorizontalAlignment="Left" Height="450" Margin="10,0,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Center" Width="40"/>
+        <Rectangle HorizontalAlignment="Center" Height="40" Margin="0,400,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Top" Width="800"/>
     </Grid>
 </UserControl>

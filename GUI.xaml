@@ -40,6 +40,43 @@
                     </StackPanel>
                 </TabItem.Content>
             </TabItem>
+            <TabItem Header="Interest calculator" Background="GhostWhite">
+                <TabItem.Content>
+                    <Grid>
+                        <Label Height="27" Width="150" Content="Interest rate:" FontSize="15" Margin="10,1,634,289" HorizontalContentAlignment="Center"/>
+                        <TextBox Height="25" Width="150" Margin="10,33,634,259" x:Name="_Rate" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <Label Height="27" Width="150" Content="Runtime:" FontSize="15" Margin="322,1,322,289" HorizontalContentAlignment="Center"/>
+                        <TextBox Height="25" Width="150" Margin="322,33,322,259" x:Name="_Runtime" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <Label Height="27" Width="150" Content="Payment amount:" FontSize="15" Margin="624,7,20,283" HorizontalContentAlignment="Center"/>
+                        <TextBox Height="25" Width="150" Margin="624,33,20,259" x:Name="_Amount" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <ScottPlot:WpfPlot Height="192" Width="640" x:Name="Zinsgraf" Margin="0,85,0,40" Background="GhostWhite"/>
+                        <Button Height="30" Width="100" Content="Calculate" Margin="347,277,347,10" Background="Green" Foreground="White" FontSize="13" FontWeight="Bold" IsDefault="True" Click="Calculate_Click" x:Name="Calculate"/>
+                        <CheckBox Height="20" Width="150" Content="Monthly Payment" Margin="634,282,10,15" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" x:Name="Monthly"/>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="Financial Overview" Background="GhostWhite">
+                <TabItem.Content>
+                    <Grid>
+                        <Image Height="256" Width="256" Margin="50,0,488,0" x:Name="Overview"></Image>
+                        <Grid Height="250" Width="300" Margin="484,10,10,57">
+                            <Label Height="36" Width="280" Content="Income:" FontSize="20" Margin="16,30,-4,184" x:Name="_Income"/>
+                            <Label Height="36" Width="300" Content="- Expenses:" FontSize="20" Margin="0,71,0,143" x:Name="_Expenses"/>
+                            <Rectangle HorizontalAlignment="Center" Height="2"  Stroke="Black" VerticalAlignment="Top" Width="324" RenderTransformOrigin="0.5,0.5" Margin="0,112,0,0">
+                                <Rectangle.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="1"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                            <Label Height="36" Width="300" Content="= Remaining:" FontSize="20" Margin="0,119,0,95" x:Name="_Remaining"/>
+                        </Grid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

@@ -6,8 +6,8 @@
         xmlns:d3="https://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:local="clr-namespace:MoneyPilot"
         mc:Ignorable="d"
-        Title="MoneyPilot" Height="450" Width="800" MaxHeight="450" MinHeight="450" MaxWidth="800" MinWidth="800">
+        Title="MoneyPilot" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
     <Grid>
-        <ContentControl x:Name="Control"/>
+        <ContentControl x:Name="Control" Height="450" Width="800"/>
     </Grid>
 </Window>
