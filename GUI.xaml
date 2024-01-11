@@ -58,7 +58,7 @@
             <TabItem Header="Financial Overview" Background="GhostWhite">
                 <TabItem.Content>
                     <Grid>
-                        <Image Height="256" Width="256" Margin="50,0,488,0" x:Name="Overview"></Image>
+                        <Image Height="316" Width="480" Margin="0,1,314,0" x:Name="Overview"/>
                         <Grid Height="250" Width="300" Margin="484,10,10,57">
                             <Label Height="36" Width="280" Content="Income:" FontSize="20" Margin="16,30,-4,184" x:Name="_Income"/>
                             <Label Height="36" Width="300" Content="- Expenses:" FontSize="20" Margin="0,71,0,143" x:Name="_Expenses"/>
@@ -78,5 +78,7 @@
                 </TabItem.Content>
             </TabItem>
         </TabControl>
+        <Rectangle HorizontalAlignment="Left" Height="450" Margin="10,0,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Center" Width="21" Panel.ZIndex="-1"/>
+        <Rectangle HorizontalAlignment="Center" Height="21" Margin="0,10,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Top" Width="800"/>
     </Grid>
 </UserControl>

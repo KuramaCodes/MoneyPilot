@@ -59,6 +59,7 @@ namespace MoneyPilot
 
                 try
                 {
+                    Einkommen_Graph.Source = null;
                     File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
                     Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
                     BitmapImage Income = new BitmapImage();
@@ -199,10 +200,56 @@ namespace MoneyPilot
         }
         #endregion
         #region Financial Overview
+        public void LoadData_Finances()
+        {
+            double Einnahmen = 0;
+            double Ausgaben = 0;
+            double Rest;
 
+            foreach (double Einnahme in Benutzer.Einnahmen)
+            {
+                Einnahmen += Einnahme;
+            }
+            foreach (double Ausgabe in Benutzer.Ausgaben)
+            {
+                Ausgaben += Ausgabe;
+            }
+            Rest = Einnahmen - Ausgaben;
+            _Income.Content = "Income: " + Einnahmen + "€";
+            _Expenses.Content = "- Expenses: " + Ausgaben + "€";
+            _Remaining.Content = "= Remaining: " + Rest + "€";
 
+            DrawFinanceGraph(Ausgaben, Rest);
+        }
+        void DrawFinanceGraph(double Ausgaben, double Rest)
+        {
+            var Plot = new Plot(480, 316);
 
+            if (Rest < 0)
+            {
+                Rest = 0;
+            }
+            double[] values = { Ausgaben, (Rest) };
+            string[] labels = { "Expenses", "Remaining" };
+            var pie = Plot.AddPie(values);
+            pie.SliceLabels = labels;
+            pie.Explode = true;
+            pie.ShowPercentages = true;
+            Plot.Legend();
 
+            try
+            {
+                File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
+                Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
+                BitmapImage Finances = new BitmapImage();
+                Finances.BeginInit();
+                Finances.CacheOption = BitmapCacheOption.OnLoad;
+                Finances.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
+                Finances.EndInit();
+                Overview.Source = Finances;
+            }
+            catch { }
+        }
         #endregion
     }
 }

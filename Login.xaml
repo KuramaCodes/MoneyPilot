@@ -16,8 +16,7 @@
             <PasswordBox x:Name="Password" Height="25" Width="275" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,49,0,0" VerticalContentAlignment="Center"/>
             <Button Content="Login" Height="26" Width="100" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,96,0,0" Click="Button_Click" IsDefault="True" FontSize="16" FontWeight="Bold"/>
         </Grid>
-        <CheckBox Content="New User" HorizontalAlignment="Left" Margin="479,255,0,0" VerticalAlignment="Top" x:Name="Registration" IsChecked="False" Click="Registration_Click" Visibility="Hidden"/>
-        <Rectangle HorizontalAlignment="Left" Height="450" Margin="10,0,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Center" Width="40"/>
-        <Rectangle HorizontalAlignment="Center" Height="40" Margin="0,400,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Top" Width="800"/>
+        <Rectangle HorizontalAlignment="Left" Height="450" Margin="20,0,0,0" Stroke="Green" Fill="Green" VerticalAlignment="Center" Width="30"/>
+        <Rectangle HorizontalAlignment="Center" Height="30" Margin="0,400,0,20" Stroke="Green" Fill="Green" VerticalAlignment="Top" Width="800"/>
     </Grid>
 </UserControl>
