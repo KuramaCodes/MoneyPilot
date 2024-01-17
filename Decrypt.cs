@@ -3,10 +3,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using System.Reflection;
 
 public class Decrypt
 {
-    private string passphrase = File.ReadAllText("/Passphrase.key");
+    private string passphrase = File.ReadAllText(@"../../Keys/Passphrase.key");
 
     public string DecryptFromBase64(string Input)
     {

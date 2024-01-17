@@ -9,13 +9,12 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Collections.Generic;
-using System.Windows.Media;
 namespace MoneyPilot
 {
     public partial class GUI : UserControl
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Pfad + "\\Data\\MoneyPilot_Database.accdb;Persist Security Info=False";
+        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         private static readonly Regex _regex = new Regex("[0-9,.]");
         public OleDbConnection con = new OleDbConnection(Database);
         public User Benutzer = new User();
@@ -42,8 +41,9 @@ namespace MoneyPilot
             }
             else
             {
-                string SQL = "SELECT * FROM Einnahmen WHERE (([Benutzer-ID])=" + Benutzer.Id + ");";
+                string SQL = "SELECT * FROM Einnahmen WHERE (([Benutzer-ID])= @ID);";
                 OleDbDataAdapter Data = new OleDbDataAdapter(SQL, Database);
+                Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
                 DataTable dt = new DataTable();
                 Data.Fill(dt);
                 Benutzer.Einnahmen.Clear();
@@ -94,7 +94,10 @@ namespace MoneyPilot
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = con;
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO Einnahmen ([Benutzer-ID], Betrag, Einnahmequelle) Values (" + Benutzer.Id + ", " + Einkommen_Wert.Text.Replace(",", ".") + ", '" + Einkommen_Kategorie.Text + "')";
+            cmd.CommandText = "INSERT INTO Einnahmen ([Benutzer-ID], Betrag, Einnahmequelle) Values (@1, @2, @3)";
+            cmd.Parameters.AddWithValue("@1", Benutzer.Id);
+            cmd.Parameters.AddWithValue("@2", Einkommen_Wert.Text.Replace(",", "."));
+            cmd.Parameters.AddWithValue("@3", Einkommen_Kategorie.Text);
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();
@@ -109,8 +112,9 @@ namespace MoneyPilot
             }
             else
             {
-                string SQL = "SELECT * FROM Ausgaben WHERE (([Benutzer-ID])=" + Benutzer.Id + ");";
+                string SQL = "SELECT * FROM Ausgaben WHERE (([Benutzer-ID])= @ID);";
                 OleDbDataAdapter Data = new OleDbDataAdapter(SQL, Database);
+                Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
                 DataTable dt = new DataTable();
                 Data.Fill(dt);
                 Benutzer.Ausgaben.Clear();
@@ -145,6 +149,9 @@ namespace MoneyPilot
             cmd.Connection = con;
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO Ausgaben ([Benutzer-ID], Betrag, Kategorie) Values (" + Benutzer.Id + ", " + Ausgaben_Wert.Text.Replace(",", ".") + ", '" + Ausgaben_Kategorie.Text + "')";
+            cmd.Parameters.AddWithValue("@1", Benutzer.Id);
+            cmd.Parameters.AddWithValue("@2", Ausgaben_Wert.Text.Replace(",", "."));
+            cmd.Parameters.AddWithValue("@3", Ausgaben_Kategorie.Text);
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();

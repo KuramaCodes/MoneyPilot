@@ -9,7 +9,7 @@ namespace MoneyPilot
     public partial class MainWindow : Window
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Pfad + "\\Data\\MoneyPilot_Database.accdb;Persist Security Info=False";
+        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         public string ID = "", Username = "", Password = "";
         public bool NewUser = false, Admin = false;
         public Login login = new Login();
@@ -60,7 +60,8 @@ namespace MoneyPilot
         }
         public void ReadData()
         {
-            cmd.CommandText = "SELECT * FROM Benutzer WHERE Benutzername = '" + login.Username.Text + "'";
+            cmd.CommandText = "SELECT * FROM Benutzer WHERE Benutzername = @1";
+            cmd.Parameters.AddWithValue("@1", login.Username.Text);
             try
             {
                 con.Open();

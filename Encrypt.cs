@@ -2,10 +2,11 @@
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using System.Reflection;
 
 public class Encrypt
 {
-    private string passphrase = File.ReadAllText("/Passphrase.key");
+    private string passphrase = File.ReadAllText(@"../../Keys/Passphrase.key");
 
     public string EncryptToBase64(string Input)
     {

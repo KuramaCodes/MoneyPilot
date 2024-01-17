@@ -8,7 +8,7 @@ namespace MoneyPilot
     public partial class Add_User : Window
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Pfad + "\\Data\\MoneyPilot_Database.accdb;Persist Security Info=False";
+        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         public OleDbConnection con = new OleDbConnection(Database);
         public OleDbCommand cmd = new OleDbCommand();
         public Encrypt encrypt = new Encrypt();
@@ -20,7 +20,9 @@ namespace MoneyPilot
         {
             cmd.Connection = con;
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO Benutzer (Benutzername, Passwort) VALUES ('" + Username.Text + "', '" + encrypt.EncryptToBase64(Password.Password) + "')";
+            cmd.CommandText = "INSERT INTO Benutzer (Benutzername, Passwort) VALUES (@1, @2)";
+            cmd.Parameters.AddWithValue("@1", Username.Text);
+            cmd.Parameters.AddWithValue("@2", encrypt.EncryptToBase64(Password.Password));
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();

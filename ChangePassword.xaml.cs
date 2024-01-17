@@ -9,7 +9,7 @@ namespace MoneyPilot
     public partial class ChangePassword : Window
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Pfad + "\\Data\\MoneyPilot_Database.accdb;Persist Security Info=False";
+        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         public OleDbConnection con = new OleDbConnection(Database);
         public OleDbCommand cmd = new OleDbCommand();
         public Encrypt encrypt = new Encrypt();
