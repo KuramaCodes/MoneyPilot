@@ -12,12 +12,12 @@
         <TabControl Height="345" Width="800" Margin="0,105,0,0" Background="GhostWhite" VerticalAlignment="Top" HorizontalAlignment="Left">
             <TabItem Header="Income" Background="GhostWhite">
                 <TabItem.Content>
-                    <StackPanel Orientation="Horizontal" Height="325" Width="794" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Height="325" Width="794" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="Panel">
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Label Height="30" Width="150" Content="Income Source:" FontSize="15" HorizontalAlignment="Left"/>
-                            <TextBox x:Name="Einkommen_Kategorie" Height="30" Width="250" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="Einkommen_Kategorie" Height="30" Width="250" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center"/>
                             <Label Height="30" Width="150" Content="Income Amount:" FontSize="15" HorizontalAlignment="Left"/>
-                            <TextBox x:Name="Einkommen_Wert" Height="30" Width="250" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="Einkommen_Wert" Height="30" Width="250" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center"/>
                             <Button Height="25" Width="75" Margin="25" Content="Refresh" x:Name="Refresh_Income" Click="Refresh_Income_Click"/>
                         </StackPanel>
                         <Label Width="175"/>
@@ -30,9 +30,9 @@
                     <StackPanel Orientation="Horizontal" Height="325" Width="794" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Label Height="30" Width="150" Content="Expense Category:" FontSize="15" HorizontalAlignment="Left"/>
-                            <TextBox x:Name="Ausgaben_Kategorie" Height="30" Width="250" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="Ausgaben_Kategorie" Height="30" Width="250" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center"/>
                             <Label Height="30" Width="150" Content="Expense Amount:" FontSize="15" HorizontalAlignment="Left"/>
-                            <TextBox x:Name="Ausgaben_Wert" Height="30" Width="250" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="Ausgaben_Wert" Height="30" Width="250" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center"/>
                             <Button Height="25" Width="75" Margin="25" Content="Refresh" x:Name="Refresh_Expenses" Click="Refresh_Expenses_Click"/>
                         </StackPanel>
                         <Label Width="175"/>
@@ -44,11 +44,11 @@
                 <TabItem.Content>
                     <Grid>
                         <Label Height="27" Width="150" Content="Interest rate:" FontSize="15" Margin="10,1,634,289" HorizontalContentAlignment="Center"/>
-                        <TextBox Height="25" Width="150" Margin="10,33,634,259" x:Name="_Rate" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <TextBox Height="25" Width="150" Margin="10,33,634,259" x:Name="_Rate" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting" FontSize="15" VerticalContentAlignment="Center"/>
                         <Label Height="27" Width="150" Content="Runtime:" FontSize="15" Margin="322,1,322,289" HorizontalContentAlignment="Center"/>
-                        <TextBox Height="25" Width="150" Margin="322,33,322,259" x:Name="_Runtime" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <TextBox Height="25" Width="150" Margin="322,33,322,259" x:Name="_Runtime" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting" FontSize="15" VerticalContentAlignment="Center"/>
                         <Label Height="27" Width="150" Content="Payment amount:" FontSize="15" Margin="624,7,20,283" HorizontalContentAlignment="Center"/>
-                        <TextBox Height="25" Width="150" Margin="624,33,20,259" x:Name="_Amount" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                        <TextBox Height="25" Width="150" Margin="624,33,20,259" x:Name="_Amount" PreviewTextInput="_Rate_PreviewTextInput" DataObject.Pasting="TextBoxPasting" FontSize="15" VerticalContentAlignment="Center"/>
                         <ScottPlot:WpfPlot Height="192" Width="640" x:Name="Zinsgraf" Margin="0,85,0,40" Background="GhostWhite"/>
                         <Button Height="30" Width="100" Content="Calculate" Margin="347,277,347,10" Background="Green" Foreground="White" FontSize="13" FontWeight="Bold" IsDefault="True" Click="Calculate_Click" x:Name="Calculate"/>
                         <CheckBox Height="20" Width="150" Content="Monthly Payment" Margin="634,282,10,15" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" x:Name="Monthly"/>

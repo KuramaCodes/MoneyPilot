@@ -9,6 +9,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Collections.Generic;
+using System.Windows.Media;
 namespace MoneyPilot
 {
     public partial class GUI : UserControl
@@ -56,18 +57,34 @@ namespace MoneyPilot
                 var pie = Plot.AddPie(values);
                 pie.Explode = true;
                 pie.ShowValues = true;
-
+                Einkommen_Graph.Source = null;
                 try
                 {
-                    Einkommen_Graph.Source = null;
+                    foreach (UIElement child in Panel.Children)
+                    {
+                        if ((child as FrameworkElement).Name.ToString() == "Einkommen_Graph")
+                        {
+                            Panel.Children.Remove(child);
+                            break;
+                        }
+                    }
                     File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
                     Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
-                    BitmapImage Income = new BitmapImage();
-                    Income.BeginInit();
-                    Income.CacheOption = BitmapCacheOption.OnLoad;
-                    Income.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
-                    Income.EndInit();
-                    Einkommen_Graph.Source = Income;
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
+                    image.EndInit();
+
+                    Image CroppedImage = new Image();
+                    CroppedImage.Height = 256;
+                    CroppedImage.Width = 256;
+                    CroppedImage.Name = "Einkommen_Graph";
+
+                    CroppedBitmap cb = new CroppedBitmap((BitmapSource)image, new Int32Rect(0, 0, 0, 0));
+                    CroppedImage.Source = cb;
+
+                    Panel.Children.Add(CroppedImage);
                 }
                 catch { }
             }
