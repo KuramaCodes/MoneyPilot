@@ -242,9 +242,6 @@
     <Resource Include="Images\User_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\MoneyPilot_Database.accdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Images\AddUser_Icon.png" />
     <Resource Include="Images\DeleteUser_Icon.png" />
   </ItemGroup>
