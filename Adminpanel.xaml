@@ -8,20 +8,46 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="GhostWhite">
     <Grid>
         <Image Height="128" Width="256" Source="/Images/MoneyPilot_Icon.png" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1"/>
-        <Label Height="30" Width="105" Content="Active Users" Margin="10,120,690,300" FontSize="15" FontWeight="UltraBlack"/>
-        <DataGrid Height="300" Margin="0,150,210,0" x:Name="Users" ItemsSource="{Binding}" IsReadOnly="True"/>
-        <Grid Height="100" Width="200" Margin="590,340,10,10" Panel.ZIndex="1">
-            <Button Height="30" Width="100" Content="Add User" FontSize="13" FontWeight="Bold" Background="Green" Foreground="White" x:Name="AddUser" Click="AddUser_Click" Margin="50,20,50,50"/>
-            <Button Height="30" Width="100" Content="Remove User" FontSize="13" FontWeight="Bold" Background="Red" Foreground="White" x:Name="RemoveUser" Click="RemoveUser_Click" Margin="50,60,50,10"/>
-        </Grid>
-        <Button Height="64" Width="64" Margin="30,10,706,376" Background="CornflowerBlue" BorderBrush="GhostWhite" x:Name="Change_Password" Click="Change_Password_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="90"/>
-                </Style>
-            </Button.Resources>
-            <Image Source="/Images/Password_Icon.png"/>
-        </Button>
-        <Label Height="30" Width="105" Content="Change Password" Margin="10,64,685,356"/>
+        <Label Height="30" Width="105" Content="Active Users" Margin="74,120,621,300" FontSize="15" FontWeight="UltraBlack"/>
+        <DataGrid Margin="74,150,74,10" x:Name="Users" ItemsSource="{Binding}" IsReadOnly="True"/>
+        <Border BorderBrush="DimGray" BorderThickness="2" Height="100" Width="350" Margin="10,10,440,340">
+            <Grid Height="96" Width="396" Background="GhostWhite">
+                <Button Height="64" Width="64" Background="LightSlateGray" BorderBrush="GhostWhite" x:Name="Change_Password" Click="Change_Password_Click" Margin="22,8,310,24">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="90"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Content>
+                        <Image Source="/Images/Password_Icon.png"/>
+                    </Button.Content>
+                </Button>
+                <Label Height="25" Width="108" Content="Change Password" FontWeight="Bold" Margin="0,68,288,2"/>
+                <Rectangle Fill="DimGray" Height="96" Width="2" Margin="113,0,281,0"/>
+                <Button Height="64" Width="64" Background="Lime" BorderBrush="GhostWhite" x:Name="Add_User" Click="AddUser_Click" Margin="133,8,199,24">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="90"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Content>
+                        <Image Source="/Images/AddUser_Icon.png" Height="40" Width="40"/>
+                    </Button.Content>
+                </Button>
+                <Label Height="25" Width="90" Content="Add new User" FontWeight="Bold" Margin="120,68,186,2" />
+                <Rectangle Fill="DimGray" Height="96" Width="2" Margin="215,0,179,0"/>
+                <Button Height="64" Width="64" Background="Red" BorderBrush="GhostWhite" x:Name="Delete_User" Click="RemoveUser_Click" Margin="252,8,80,24">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="90"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Content>
+                        <Image Source="/Images/DeleteUser_Icon.png" Height="40" Width="40"/>
+                    </Button.Content>
+                </Button>
+                <Label Height="25" Width="125" Content="Delete selected User" FontWeight="Bold" Margin="222,68,49,2" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

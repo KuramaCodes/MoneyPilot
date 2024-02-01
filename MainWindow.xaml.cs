@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Data;
-using System.Data.OleDb;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using MySqlConnector;
 namespace MoneyPilot
 {
     public partial class MainWindow : Window
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         public string ID = "", Username = "", Password = "";
         public bool NewUser = false, Admin = false;
         public Login login = new Login();
-        public OleDbConnection con = new OleDbConnection(Database);
-        public OleDbCommand cmd = new OleDbCommand();
         public Decrypt decrypt = new Decrypt();
+        public Connection Database = new Connection();
+        public MySqlConnection con = new MySqlConnection();
+        public MySqlCommand cmd = new MySqlCommand();
         public MainWindow()
         {
             InitializeComponent();
@@ -23,10 +23,13 @@ namespace MoneyPilot
             cmd.Connection = con;
             Control.Content = login;
         }
+        private void OnExit(object sender, EventArgs e)
+        {
+            con.Close();
+        }
         private void Login_ButtonClick(object sender, RoutedEventArgs e)
         {
             cmd.CommandType = CommandType.Text;
-
             ReadData();
             if (login.Username.Text == Username && login.Password.Password == decrypt.DecryptFromBase64(Password) && Admin == true)
             {
@@ -64,21 +67,23 @@ namespace MoneyPilot
             cmd.Parameters.AddWithValue("@1", login.Username.Text);
             try
             {
-                con.Open();
-                OleDbDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                Database.OpenConnection(); //Open Database
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) //Read user Data From Database
                 {
                     ID = reader["Benutzer-ID"].ToString();
                     Username = reader["Benutzername"].ToString();
                     Password = reader["Passwort"].ToString();
                     Admin = Convert.ToBoolean(reader["Admin"]);
                 }
-                con.Close();
             }
             catch (Exception)
             {
-                MessageBox.Show("Wrong Password or Username", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                MessageBox.Show("Loading Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                Database.CloseConnection(); //Close Database
             }
         }
     }

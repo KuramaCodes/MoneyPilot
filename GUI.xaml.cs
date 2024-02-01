@@ -1,23 +1,22 @@
-﻿using System.IO;
-using System.Windows.Controls;
+﻿using MySqlConnector;
 using ScottPlot;
-using System.Reflection;
 using System;
-using System.Windows.Media.Imaging;
-using System.Data.OleDb;
+using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 namespace MoneyPilot
 {
     public partial class GUI : UserControl
     {
         public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
         private static readonly Regex _regex = new Regex("[0-9,.]");
-        public OleDbConnection con = new OleDbConnection(Database);
         public User Benutzer = new User();
+        public Connection Connect = new Connection();
         public GUI()
         {
             InitializeComponent();
@@ -35,126 +34,101 @@ namespace MoneyPilot
         #region Income
         public void LoadData_Income()
         {
-            if (!File.Exists(Pfad + "\\Data\\MoneyPilot_Database.accdb"))
+            if (Connect.isConnected)
             {
-                throw new Exception("Database was moved or deleted");
-            }
-            else
-            {
-                string SQL = "SELECT * FROM Einnahmen WHERE (([Benutzer-ID])= @ID);";
-                OleDbDataAdapter Data = new OleDbDataAdapter(SQL, Database);
+                Connect.OpenConnection();
+
+                string SQL = "SELECT * FROM Einnahmen WHERE BenutzerID = @ID;";
+                MySqlDataAdapter Data = new MySqlDataAdapter(SQL, Connect.con);
                 Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
                 DataTable dt = new DataTable();
                 Data.Fill(dt);
+
+                Connect.CloseConnection();
+
                 Benutzer.Einnahmen.Clear();
-                for(int i = 0; i < dt.Rows.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     Benutzer.Einnahmen.Add(Convert.ToDouble(dt.Rows[i][2]));
                 }
-                var Plot = new Plot(256, 256);
 
+                Einkommen_Graph.Plot.Clear();
+                var Plot = new Plot(256, 256);
                 double[] values = Benutzer.Einnahmen.ToArray();
-                var pie = Plot.AddPie(values);
+                var pie = Plot.AddPie(values, true);
                 pie.Explode = true;
                 pie.ShowValues = true;
-                Einkommen_Graph.Source = null;
-                try
-                {
-                    foreach (UIElement child in Panel.Children)
-                    {
-                        if ((child as FrameworkElement).Name.ToString() == "Einkommen_Graph")
-                        {
-                            Panel.Children.Remove(child);
-                            break;
-                        }
-                    }
-                    File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
-                    Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.CacheOption = BitmapCacheOption.OnLoad;
-                    image.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Income.PNG");
-                    image.EndInit();
 
-                    Image CroppedImage = new Image();
-                    CroppedImage.Height = 256;
-                    CroppedImage.Width = 256;
-                    CroppedImage.Name = "Einkommen_Graph";
-
-                    CroppedBitmap cb = new CroppedBitmap((BitmapSource)image, new Int32Rect(0, 0, 0, 0));
-                    CroppedImage.Source = cb;
-
-                    Panel.Children.Add(CroppedImage);
-                }
-                catch { }
+                Einkommen_Graph.Plot.Add(pie);
+                Einkommen_Graph.Refresh();
             }
         }
         void WriteIncome()
         {
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = con;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = Connect.con;
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO Einnahmen ([Benutzer-ID], Betrag, Einnahmequelle) Values (@1, @2, @3)";
             cmd.Parameters.AddWithValue("@1", Benutzer.Id);
             cmd.Parameters.AddWithValue("@2", Einkommen_Wert.Text.Replace(",", "."));
             cmd.Parameters.AddWithValue("@3", Einkommen_Kategorie.Text);
-            con.Open();
+
+            Connect.OpenConnection();
             cmd.ExecuteNonQuery();
-            con.Close();
+            Connect.CloseConnection();
         }
         #endregion
         #region Expenses
         public void LoadData_Expenses()
         {
-            if (!File.Exists(Pfad + "\\Data\\MoneyPilot_Database.accdb"))
-            {
-                throw new Exception("Database was moved or deleted");
-            }
-            else
-            {
-                string SQL = "SELECT * FROM Ausgaben WHERE (([Benutzer-ID])= @ID);";
-                OleDbDataAdapter Data = new OleDbDataAdapter(SQL, Database);
-                Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
-                DataTable dt = new DataTable();
-                Data.Fill(dt);
-                Benutzer.Ausgaben.Clear();
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    Benutzer.Ausgaben.Add(Convert.ToDouble(dt.Rows[i][2]));
-                }
-                var Plot = new Plot(256, 256);
+            string SQL = "SELECT * FROM Ausgaben WHERE (BenutzerID = @ID);";
+            MySqlDataAdapter Data = new MySqlDataAdapter(SQL, Connect.con);
+            Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
 
-                double[] values = Benutzer.Ausgaben.ToArray();
-                var pie = Plot.AddPie(values);
-                pie.Explode = true;
-                pie.ShowValues = true;
+            DataTable dt = new DataTable();
+            Data.Fill(dt);
 
-                try
-                {
-                    File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                    Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                    BitmapImage Income = new BitmapImage();
-                    Income.BeginInit();
-                    Income.CacheOption = BitmapCacheOption.OnLoad;
-                    Income.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                    Income.EndInit();
-                    Ausgaben_Graph.Source = Income;
-                }
-                catch { }
+            Benutzer.Ausgaben.Clear();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Benutzer.Ausgaben.Add(Convert.ToDouble(dt.Rows[i][2]));
             }
+
+            var Plot = new Plot(256, 256);
+
+            double[] values = Benutzer.Ausgaben.ToArray();
+            var pie = Plot.AddPie(values);
+            pie.Explode = true;
+            pie.ShowValues = true;
+            try
+            {
+                File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
+                Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
+                BitmapImage Income = new BitmapImage();
+                Income.BeginInit();
+                Income.CacheOption = BitmapCacheOption.OnLoad;
+                Income.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
+                Income.EndInit();
+                Ausgaben_Graph.Source = Income;
+            }
+            catch { }
         }
         void WriteExpenses()
         {
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = con;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = Connect.con;
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO Ausgaben ([Benutzer-ID], Betrag, Kategorie) Values (" + Benutzer.Id + ", " + Ausgaben_Wert.Text.Replace(",", ".") + ", '" + Ausgaben_Kategorie.Text + "')";
+            cmd.CommandText = "INSERT INTO Ausgaben (BenutzerID, Betrag, Kategorie) Values (" + Benutzer.Id + ", " + Ausgaben_Wert.Text.Replace(",", ".") + ", '" + Ausgaben_Kategorie.Text + "')";
             cmd.Parameters.AddWithValue("@1", Benutzer.Id);
             cmd.Parameters.AddWithValue("@2", Ausgaben_Wert.Text.Replace(",", "."));
             cmd.Parameters.AddWithValue("@3", Ausgaben_Kategorie.Text);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
+
+            Connect.OpenConnection();
+            if (Connect.isConnected)
+            {
+                cmd.ExecuteNonQuery();
+            }
+            Connect.CloseConnection();
         }
         #endregion
         #region Interest Calcuator
@@ -163,6 +137,7 @@ namespace MoneyPilot
             double Money = Convert.ToDouble(_Amount.Text);
             int Runtime = Convert.ToInt32(_Runtime.Text);
             double Interest = Convert.ToDouble(_Rate.Text);
+
             List<double> X = new List<double>();
             List<double> Y = new List<double>();
 
@@ -172,7 +147,7 @@ namespace MoneyPilot
                 {
                     X.Add(Money);
                     Y.Add(i);
-                    Money *= (Interest + 1);
+                    Money *= Interest + 1;
                     for (int j = 0; j < Runtime * 12; j++)
                     {
                         Money += Convert.ToDouble(_Amount.Text);
@@ -182,13 +157,13 @@ namespace MoneyPilot
                 Zinsgraf.Refresh();
                 Zinsgraf.Plot.AxisAuto();
             }
-            else if (Monthly.IsChecked == false) 
+            else if (Monthly.IsChecked == false)
             {
                 for (int i = 0; i < Runtime; i++)
                 {
                     X.Add(Money);
                     Y.Add(i);
-                    Money *= (Interest + 1);
+                    Money *= Interest + 1;
                 }
                 Zinsgraf.Plot.AddScatter(Y.ToArray(), X.ToArray());
                 Zinsgraf.Refresh();
@@ -253,7 +228,7 @@ namespace MoneyPilot
             {
                 Rest = 0;
             }
-            double[] values = { Ausgaben, (Rest) };
+            double[] values = { Ausgaben, Rest };
             string[] labels = { "Expenses", "Remaining" };
             var pie = Plot.AddPie(values);
             pie.SliceLabels = labels;

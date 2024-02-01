@@ -1,17 +1,13 @@
-﻿using System.Data.OleDb;
-using System.Data;
-using System.IO;
-using System.Reflection;
+﻿using MySqlConnector;
 using System.Windows;
+using System.Data;
 
 namespace MoneyPilot
 {
     public partial class ChangePassword : Window
     {
-        public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
-        public OleDbConnection con = new OleDbConnection(Database);
-        public OleDbCommand cmd = new OleDbCommand();
+        public Connection Connect = new Connection();
+        public MySqlCommand cmd = new MySqlCommand();
         public Encrypt encrypt = new Encrypt();
         public ChangePassword()
         {
@@ -21,12 +17,15 @@ namespace MoneyPilot
         {
             if (NewPasswordOne.Password == NewPasswordTwo.Password)
             {
-                cmd.Connection = con;
+                cmd.Connection = Connect.con;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "Update Benutzer Set Passwort = '" + encrypt.EncryptToBase64(NewPasswordTwo.Password) + "' Where Admin = true";
-                con.Open();
-                cmd.ExecuteNonQuery();
-                con.Close();
+                Connect.OpenConnection();
+                if (Connect.isConnected)
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                Connect.CloseConnection();
                 this.Close();
             }
             else if (NewPasswordOne.Password != NewPasswordTwo.Password)

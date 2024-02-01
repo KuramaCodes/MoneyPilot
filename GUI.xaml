@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
-             xmlns:local="clr-namespace:MoneyPilot"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="GhostWhite">
     <Grid>
@@ -12,7 +11,7 @@
         <TabControl Height="345" Width="800" Margin="0,105,0,0" Background="GhostWhite" VerticalAlignment="Top" HorizontalAlignment="Left">
             <TabItem Header="Income" Background="GhostWhite">
                 <TabItem.Content>
-                    <StackPanel Orientation="Horizontal" Height="325" Width="794" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="Panel">
+                    <StackPanel Orientation="Horizontal" Height="325" Width="794" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="Panel" >
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Label Height="30" Width="150" Content="Income Source:" FontSize="15" HorizontalAlignment="Left"/>
                             <TextBox x:Name="Einkommen_Kategorie" Height="30" Width="250" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center"/>
@@ -21,7 +20,7 @@
                             <Button Height="25" Width="75" Margin="25" Content="Refresh" x:Name="Refresh_Income" Click="Refresh_Income_Click"/>
                         </StackPanel>
                         <Label Width="175"/>
-                        <Image x:Name="Einkommen_Graph" Height="256" Width="256"/>
+                        <ScottPlot:WpfPlot x:Name="Einkommen_Graph" Height="256" Width="256" Background="Gray" />
                     </StackPanel>
                 </TabItem.Content>
             </TabItem>
