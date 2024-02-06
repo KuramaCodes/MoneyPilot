@@ -38,7 +38,6 @@ namespace MoneyPilot
             List<int> UserID = new List<int>();
             List<string> UserNames = new List<string>();
             MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = Connect.con;
             cmd.CommandType = CommandType.Text;
 
             foreach (DataRowView row in Users.SelectedItems)
@@ -47,9 +46,10 @@ namespace MoneyPilot
             }
             foreach (int ID in UserID)
             {
-                string SQL = "Delete From Benutzer Where [BenutzerID] = " + ID;
+                string SQL = "Delete From Benutzer Where BenutzerID = " + ID;
                 cmd.CommandText = SQL;
                 Connect.OpenConnection();
+                cmd.Connection = Connect.con;
                 cmd.ExecuteNonQuery();
                 Connect.CloseConnection();
             }
