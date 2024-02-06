@@ -1,18 +1,14 @@
 ﻿using System.Windows.Controls;
 using System.Data;
-using System.Data.OleDb;
-using System.Reflection;
-using System.IO;
 using System.Collections.Generic;
 using System;
+using MySqlConnector;
 namespace MoneyPilot
 {
     public partial class Adminpanel : UserControl
     {
-        public static string Pfad = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string Database = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@../../Database/MoneyPilot_Database.accdb";
-        public OleDbConnection con = new OleDbConnection(Database);
-        public OleDbCommand cmd = new OleDbCommand();
+        public Connection Connect = new Connection();
+        public MySqlCommand cmd = new MySqlCommand();
         public Adminpanel()
         {
             InitializeComponent();
@@ -20,12 +16,16 @@ namespace MoneyPilot
         }
         public void LoadData()
         {
+            cmd.Parameters.Clear();
             DataTable dt = new DataTable();
-            string SQL = "Select * From Benutzer Where Admin <> @1";
-            OleDbDataAdapter Data = new OleDbDataAdapter(SQL,con);
-            Data.SelectCommand.Parameters.AddWithValue("@1", true);
-            Data.Fill(dt);
-            Users.DataContext = dt.DefaultView;
+            cmd.CommandText = "Select * From Benutzer Where Admin = @1";
+            cmd.Parameters.AddWithValue("@1", 0);
+            Connect.OpenConnection();
+            cmd.Connection = Connect.con;
+            MySqlDataAdapter data = new MySqlDataAdapter(cmd);
+            data.Fill(dt);
+            Connect.CloseConnection();
+            Users.DataContext = dt;
         }
         private void AddUser_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -37,27 +37,21 @@ namespace MoneyPilot
         {
             List<int> UserID = new List<int>();
             List<string> UserNames = new List<string>();
-            DataTable dt = new DataTable();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = con;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = Connect.con;
             cmd.CommandType = CommandType.Text;
 
             foreach (DataRowView row in Users.SelectedItems)
             {
                 UserID.Add(Convert.ToInt32(row.Row.ItemArray[0]));
-                UserNames.Add(row.Row.ItemArray[1].ToString());
             }
             foreach (int ID in UserID)
             {
-                string SQL = "Delete From Benutzer Where [Benutzer-ID] = " + ID;
+                string SQL = "Delete From Benutzer Where [BenutzerID] = " + ID;
                 cmd.CommandText = SQL;
-                con.Open();
+                Connect.OpenConnection();
                 cmd.ExecuteNonQuery();
-                con.Close();
-            }
-            foreach (string username in UserNames)
-            {
-                Directory.Delete(Pfad + "\\Graphs\\" + username, true);
+                Connect.CloseConnection();
             }
             LoadData();
         }

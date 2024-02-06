@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using MySqlConnector;
 namespace MoneyPilot
@@ -14,18 +15,16 @@ namespace MoneyPilot
         public Login login = new Login();
         public Decrypt decrypt = new Decrypt();
         public Connection Database = new Connection();
-        public MySqlConnection con = new MySqlConnection();
         public MySqlCommand cmd = new MySqlCommand();
         public MainWindow()
         {
             InitializeComponent();
             login.ButtonClick += Login_ButtonClick;
-            cmd.Connection = con;
             Control.Content = login;
         }
         private void OnExit(object sender, EventArgs e)
         {
-            con.Close();
+            Database.CloseConnection();
         }
         private void Login_ButtonClick(object sender, RoutedEventArgs e)
         {
@@ -68,10 +67,11 @@ namespace MoneyPilot
             try
             {
                 Database.OpenConnection(); //Open Database
+                cmd.Connection = Database.con;
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) //Read user Data From Database
                 {
-                    ID = reader["Benutzer-ID"].ToString();
+                    ID = reader["BenutzerID"].ToString();
                     Username = reader["Benutzername"].ToString();
                     Password = reader["Passwort"].ToString();
                     Admin = Convert.ToBoolean(reader["Admin"]);

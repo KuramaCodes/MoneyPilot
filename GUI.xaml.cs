@@ -17,6 +17,7 @@ namespace MoneyPilot
         private static readonly Regex _regex = new Regex("[0-9,.]");
         public User Benutzer = new User();
         public Connection Connect = new Connection();
+        public MySqlCommand cmd = new MySqlCommand();
         public GUI()
         {
             InitializeComponent();
@@ -37,10 +38,12 @@ namespace MoneyPilot
             if (Connect.isConnected)
             {
                 Connect.OpenConnection();
+                cmd.Connection = Connect.con;
+                cmd.Parameters.Clear();
+                cmd.CommandText = "SELECT * FROM Einnahmen WHERE BenutzerID = @ID;";
+                cmd.Parameters.AddWithValue("@ID", Benutzer.Id);
 
-                string SQL = "SELECT * FROM Einnahmen WHERE BenutzerID = @ID;";
-                MySqlDataAdapter Data = new MySqlDataAdapter(SQL, Connect.con);
-                Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
+                MySqlDataAdapter Data = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 Data.Fill(dt);
 
@@ -81,12 +84,16 @@ namespace MoneyPilot
         #region Expenses
         public void LoadData_Expenses()
         {
-            string SQL = "SELECT * FROM Ausgaben WHERE (BenutzerID = @ID);";
-            MySqlDataAdapter Data = new MySqlDataAdapter(SQL, Connect.con);
-            Data.SelectCommand.Parameters.AddWithValue("@ID", Benutzer.Id);
+            Connect.OpenConnection();
+            cmd.Connection = Connect.con;
+            cmd.Parameters.Clear();
+            cmd.CommandText = "SELECT * FROM Ausgaben WHERE (BenutzerID = @ID);";
+            cmd.Parameters.AddWithValue("@ID", Benutzer.Id);
+            MySqlDataAdapter Data = new MySqlDataAdapter(cmd);
 
             DataTable dt = new DataTable();
             Data.Fill(dt);
+            Connect.CloseConnection();
 
             Benutzer.Ausgaben.Clear();
             for (int i = 0; i < dt.Rows.Count; i++)

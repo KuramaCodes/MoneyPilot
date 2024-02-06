@@ -14,13 +14,14 @@ namespace MoneyPilot
         }
         private void Add_New_User_Click(object sender, RoutedEventArgs e)
         {
+            Connect.OpenConnection();
             cmd.Connection = Connect.con;
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO Benutzer (Benutzername, Passwort) VALUES (@1, @2)";
+            cmd.CommandText = "INSERT INTO Benutzer (Benutzername, Passwort, Admin) VALUES (@1, @2, @3)";
             cmd.Parameters.AddWithValue("@1", Username.Text);
             cmd.Parameters.AddWithValue("@2", encrypt.EncryptToBase64(Password.Password));
+            cmd.Parameters.AddWithValue("@3", 0);
 
-            Connect.OpenConnection();
             if (Connect.isConnected)
             {
                 cmd.ExecuteNonQuery();
