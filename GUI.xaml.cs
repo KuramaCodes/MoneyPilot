@@ -102,23 +102,13 @@ namespace MoneyPilot
             }
 
             var Plot = new Plot(256, 256);
-
             double[] values = Benutzer.Ausgaben.ToArray();
             var pie = Plot.AddPie(values);
             pie.Explode = true;
             pie.ShowValues = true;
-            try
-            {
-                File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                BitmapImage Income = new BitmapImage();
-                Income.BeginInit();
-                Income.CacheOption = BitmapCacheOption.OnLoad;
-                Income.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Expenses.PNG");
-                Income.EndInit();
-                Ausgaben_Graph.Source = Income;
-            }
-            catch { }
+
+            Ausgaben_Graph.Plot.Add(pie);
+            Ausgaben_Graph.Refresh();
         }
         void WriteExpenses()
         {
@@ -243,18 +233,8 @@ namespace MoneyPilot
             pie.ShowPercentages = true;
             Plot.Legend();
 
-            try
-            {
-                File.Delete(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
-                Plot.SaveFig(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
-                BitmapImage Finances = new BitmapImage();
-                Finances.BeginInit();
-                Finances.CacheOption = BitmapCacheOption.OnLoad;
-                Finances.UriSource = new Uri(Pfad + "//Graphs//" + Benutzer.Username + "//Finances.PNG");
-                Finances.EndInit();
-                Overview.Source = Finances;
-            }
-            catch { }
+            Overview.Plot.Add(pie);
+            Overview.Refresh();
         }
         #endregion
     }

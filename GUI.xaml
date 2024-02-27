@@ -35,7 +35,7 @@
                             <Button Height="25" Width="75" Margin="25" Content="Refresh" x:Name="Refresh_Expenses" Click="Refresh_Expenses_Click"/>
                         </StackPanel>
                         <Label Width="175"/>
-                        <Image x:Name="Ausgaben_Graph" Height="256" Width="256"/>
+                        <ScottPlot:WpfPlot x:Name="Ausgaben_Graph" Height="256" Width="256"/>
                     </StackPanel>
                 </TabItem.Content>
             </TabItem>
@@ -57,7 +57,7 @@
             <TabItem Header="Financial Overview" Background="GhostWhite">
                 <TabItem.Content>
                     <Grid>
-                        <Image Height="316" Width="480" Margin="0,1,314,0" x:Name="Overview"/>
+                        <ScottPlot:WpfPlot Height="316" Width="480" Margin="0,1,314,0" x:Name="Overview"/>
                         <Grid Height="250" Width="300" Margin="484,10,10,57">
                             <Label Height="36" Width="280" Content="Income:" FontSize="20" Margin="16,30,-4,184" x:Name="_Income"/>
                             <Label Height="36" Width="300" Content="- Expenses:" FontSize="20" Margin="0,71,0,143" x:Name="_Expenses"/>
