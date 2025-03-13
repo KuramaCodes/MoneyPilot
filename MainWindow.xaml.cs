@@ -2,7 +2,6 @@
 using System.Data;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using MySqlConnector;
 namespace MoneyPilot
@@ -21,6 +20,7 @@ namespace MoneyPilot
             InitializeComponent();
             login.ButtonClick += Login_ButtonClick;
             Control.Content = login;
+            Database.SetupConnection();
         }
         private void OnExit(object sender, EventArgs e)
         {
@@ -62,6 +62,7 @@ namespace MoneyPilot
         }
         public void ReadData()
         {
+            cmd.Parameters.Clear();
             cmd.CommandText = "SELECT * FROM Benutzer WHERE Benutzername = @1";
             cmd.Parameters.AddWithValue("@1", login.Username.Text);
             try

@@ -5,7 +5,7 @@ namespace MoneyPilot
     {
         public MySqlConnection con;
         public bool isConnected = false;
-        public void OpenConnection()
+        public void SetupConnection()
         {
             var builder = new MySqlConnectionStringBuilder
             {
@@ -16,6 +16,9 @@ namespace MoneyPilot
                 Database = "Work",
             };
             con = new MySqlConnection(builder.ConnectionString);
+        }
+        public void OpenConnection()
+        {
             con.Open();
             isConnected = true;
         }

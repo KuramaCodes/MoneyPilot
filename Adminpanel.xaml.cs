@@ -16,6 +16,7 @@ namespace MoneyPilot
         }
         public void LoadData()
         {
+            Connect.SetupConnection();
             cmd.Parameters.Clear();
             DataTable dt = new DataTable();
             cmd.CommandText = "Select * From Benutzer Where Admin = @1";

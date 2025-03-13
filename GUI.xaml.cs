@@ -21,6 +21,7 @@ namespace MoneyPilot
         public GUI()
         {
             InitializeComponent();
+            Connect.SetupConnection();
         }
         private void Refresh_Income_Click(object sender, System.Windows.RoutedEventArgs e)
         {

@@ -17,6 +17,7 @@ namespace MoneyPilot
         {
             if (NewPasswordOne.Password == NewPasswordTwo.Password)
             {
+                Connect.SetupConnection();
                 cmd.Connection = Connect.con;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "Update Benutzer Set Passwort = '" + encrypt.EncryptToBase64(NewPasswordTwo.Password) + "' Where Admin = true";
